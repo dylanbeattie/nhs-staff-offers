@@ -1,0 +1,24 @@
+﻿@model Dictionary<string, List<List<string>>>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+    <h1 class="display-4">NHS Help</h1>
+    @foreach(var key in Model.Keys) {
+        <h2>@key</h2>
+        <table>
+        @foreach(var row in Model[key]) {
+            <tr>
+                @foreach(var cell in row) {
+                    <td>
+                        @if (System.Text.RegularExpressions.Regex.IsMatch("^https?://", cell.Trim())) {
+                            <a href="@cell">@cell</a>
+                        } else {
+                            @cell
+                        }
+                        </td>
+                }
+            </tr>
+        }
+        </table>
+    }
