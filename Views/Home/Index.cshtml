@@ -1,24 +1,39 @@
-﻿@model Dictionary<string, List<List<string>>>
+﻿@model OffersViewData
 @{
     ViewData["Title"] = "Home Page";
 }
-
-    <h1 class="display-4">NHS Help</h1>
-    @foreach(var key in Model.Keys) {
-        <h2>@key</h2>
-        <table>
-        @foreach(var row in Model[key]) {
-            <tr>
-                @foreach(var cell in row) {
-                    <td>
-                        @if (System.Text.RegularExpressions.Regex.IsMatch("^https?://", cell.Trim())) {
-                            <a href="@cell">@cell</a>
+<h1>List of NHS staff offers</h1>
+<p>NHS workers have been inundated with kind offers of support from a wide range of companies – from discounted taxi rides, to dedicated supermarket shopping times, to free food and discounted products.</p>
+<p>NHS England and NHS Improvement has been working over the past week to verify these offers and bring them into a single place, so that NHS staff can take advantage of them. This list includes all of the offers that we have been able to confirm so far across supermarkets, food and transport. The list includes details of how to access the offers, and any terms and conditions to be aware of.</p>
+<p>Please note that this is not an exhaustive list and it will be updated regularly with any changes and new offers.</p>
+@foreach(var key in Model.Offers.Keys) {
+    <h2>@key</h2>
+    <table>
+        <tr>
+            @foreach(var th in Model.Offers[key].First()) {
+                <th>@th</th>
+            }
+        </tr>
+        @foreach(var row in Model.Offers[key].Skip(1)) {
+        <tr>
+            @foreach(var cell in row) {
+                <td>
+                    @foreach(var token in cell.Split(' ')) {
+                        if (token.StartsWith("http")) {
+                            <a href="@token">@token</a>
                         } else {
-                            @cell
+                            @token
                         }
-                        </td>
-                }
-            </tr>
-        }
-        </table>
+                        <text> </text>
+                    }
+                </td>
+            }
+        </tr>
     }
+    </table>
+}
+
+<p>This is an unofficial web site created by @@dylanbeattie.</p>
+<p>Automatically converted from <a href="@Model.SpreadsheetUrl">this spreadsheet</a></p>
+<p>Original web page: <a href="@Model.OriginalWebUrl">@Model.OriginalWebUrl</a></p>
+<p>Source code: <a href="https://github.com/dylanbeattie/nhs-staff-offers">https://github.com/dylanbeattie/nhs-staff-offers</a></p>
